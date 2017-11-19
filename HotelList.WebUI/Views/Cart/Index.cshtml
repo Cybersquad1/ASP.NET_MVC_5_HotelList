@@ -1,0 +1,54 @@
+﻿@model HotelList.WebUI.Models.CartIndexViewModel
+
+@{
+    ViewBag.Title = "Lista Hoteli: Twój wybór";
+}
+
+<style>
+    #cartTable td{ vertical-align:middle;}
+</style>
+<h2>Lista Hoteli</h2>
+<table id="cartTable" class="table">
+    <thead>
+        <tr>
+            <th>Ilość dób hotelowych</th>
+            <th>Hotel</th>
+            <th class="text-right">Cena</th>
+            <th class="text-right">Wartość</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var line in Model.Cart.Lines)
+        {
+            <tr>
+                <td class="text-left">@line.Quantity</td>
+                <td class="text-left">@line.Hotel.NameHotel</td>
+                <td class="text-right">@line.Hotel.Price.ToString("c")</td>
+                <td class="text-right">@((line.Quantity * line.Hotel.Price).ToString("c"))</td>
+                <td>
+                    @using (Html.BeginForm("RemoveFromCart", "Cart"))
+                    {
+                        @Html.Hidden("HotelId", line.Hotel.HotelID)
+                        @Html.HiddenFor(x => x.ReturnUrl)
+                        <input class="btn btn-sm btn-warning" type="submit" value="Usuń" />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-right">Razem:</td>
+            <td class="text-right">
+            @Model.Cart.ComputeTotalValue().ToString("c")
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<div class="text-center">
+    <a class="btn btn-primary" href="@Model.ReturnUrl">Kontynuuj wybór</a>
+    @Html.ActionLink("Zarezerwuj", "Checkout", null, new { @class ="btn btn-primary"})
+</div>
+
+

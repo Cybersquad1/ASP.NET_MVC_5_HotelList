@@ -1,0 +1,14 @@
+﻿@using HotelList.Domain.Entities
+@model HotelList.WebUI.Models.HotelListViewModel
+
+@{
+    ViewBag.Title = "Produkty";
+}
+@foreach (var p in Model.Hotels)
+{
+    @Html.Partial("HotelSummary", p);
+}
+
+<div class="btn-group pull-right">
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x, category = Model.CurrentCategory}))
+</div>
